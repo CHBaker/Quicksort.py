@@ -3,61 +3,60 @@ Input a list.
 Output a sorted list."""
 
 # helper function moves starting index to compar with pivot to > value
-def compare(newpivot, array):
-        index = 0
-        element = array[index]
-        while newpivot >= element:
-            index += 1
-            element = array[index]
-            print "loop ---- index of new element count : ", index
-        return index
+def compare(pivot, array, start):
+        element = array[start]
+        while pivot >= element:
+            start += 1
+            element = array[start]
+            print "loop ---- index of new element count : ", start
+        return start
 
 # helper function moves items within list for in-place sort        
-def move(compare, array, pivotIndex):
+def move(start, array, pivotIndex, end):
         # move element to last index
-        array.append(array[compare])
+        array.insert(end, array[start])
         # delete copy of first element
-        array.pop(compare)
+        array.pop(start)
         print "first move : ", array
         
         # move item left of pivot to last element to the front of the list
-        array.insert(0, array[pivotIndex - 2])
+        array.insert(start, array[pivotIndex - 2])
         # remove copy of said element
         array.pop(pivotIndex - 1)
         print "second move : ", array
         
         return array
         
-def quicksort(array):
+def quicksort(array, start, end):
     i = 1
-    point = 1
-    pivot = array[(len(array) - point)]
-    pivotIndex = (len(array) - point)
+    point = start + 1
+    pivot = array[(len(array[start: end]) - point)]
+    pivotIndex = (len(array[start: end]) - point)
     
-    while i <= ((len(array) / 2) - 1):
-        start = array[0]
+    while i <= ((len(array[start: end]) - 1)):
+        startval = array[start]
         print "start :", start, "pivot :", pivot
         
         if pivot < start:
-            pivotIndex = len(array) - point
-            array = move(0, array, pivotIndex)
+            pivotIndex = len(array[start: end]) - point
+            array = move(start, array, pivotIndex, end)
             # update pivot location by changing point
             point += 1
             print "point : ", point
             print "index: ", pivotIndex
             i += 1
             print "pivot", pivot
-            start = array[0]
+            startval = array[start]
             
         elif pivot >= start:
             print "elif move"
-            pivotIndex = len(array) - point
+            pivotIndex = len(array[start: end]) - point
             print "---arrays of elif----"
-            array = move((compare(pivot, array)), array, pivotIndex)
+            array = move((compare(pivot, array, start)), array, pivotIndex, end)
             # update pivot location by changing point
             point += 1
             print "point : ", point
-            start = array[0]
+            startval = array[start]
         
             i += 1
             
@@ -68,4 +67,4 @@ def quicksort(array):
     
 
 test = [21, 4, 1, 3, 9, 20, 25, 6, 21, 14]
-print quicksort(test)
+print quicksort(test, 0, -1)
